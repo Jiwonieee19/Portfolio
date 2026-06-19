@@ -8,13 +8,13 @@ scene.background = new THREE.Color(0x2b2b2b);
 
 // camera
 const camera = new THREE.PerspectiveCamera(
-    23, // field of view (FOV) in degrees — higher = wider view, objects look smaller
+    25, // field of view (FOV) in degrees — higher = wider view, objects look smaller
     window.innerWidth / window.innerHeight, // aspect ratio (matches screen)
     0.1, // near clipping plane — anything closer is invisible
     1000 // far clipping plane — anything farther is invisible
 );
 
-camera.position.set(-2, 5, 15); // camera position (x=left/right, y=up/down, z=forward/back)
+camera.position.set( 0.5, 5, 15); // camera position (x=left/right, y=up/down, z=forward/back)
 
 // renderer
 const renderer = new THREE.WebGLRenderer();
@@ -70,6 +70,13 @@ scene.add(fillRight);
 
 scene.add(new THREE.AmbientLight(0xffffff, 0.1));
 
+// load mixer - it does load the animation keyframe from the glb
+let mixer;
+let cubeAction;
+let cubePaused = false;
+let cubePauseTimer = 0;
+const cubePauseDuration = 2;
+
 // load model
 loader.load('./models/dino.glb', (gltf) => {
 
@@ -78,13 +85,45 @@ loader.load('./models/dino.glb', (gltf) => {
     gltf.scene.rotation.set(0, Math.PI / 1.25, 0); // x=pitch, y=yaw(which way it faces), z=roll (radians)
     scene.add(gltf.scene);
 
+    mixer = new THREE.AnimationMixer(gltf.scene);
+    gltf.animations.forEach((clip) => {
+        const action = mixer.clipAction(clip);
+        action.timeScale = clip.name === "eyeAction" ? 0.8 : 1;
+        if (clip.name === "Cube.001Action") {
+            cubeAction = action;
+            cubeAction.setLoop(THREE.LoopOnce);
+            cubeAction.clampWhenFinished = true;
+        }
+        action.play();
+    });
+
+    mixer.addEventListener('finished', (e) => {
+        if (e.action === cubeAction) {
+            cubePaused = true;
+            cubePauseTimer = 0;
+        }
+    });
+
 });
 
+
+let clock = new THREE.Clock();
 
 // animation loop
 function animate() {
 
     requestAnimationFrame(animate);
+
+    const delta = clock.getDelta();
+    if (mixer) mixer.update(delta);
+
+    if (cubePaused) {
+        cubePauseTimer += delta;
+        if (cubePauseTimer >= cubePauseDuration) {
+            cubeAction.reset().play();
+            cubePaused = false;
+        }
+    }
 
     // return to home after 1 second of no interaction
     if (!isInteracting) {
@@ -97,7 +136,7 @@ function animate() {
 
     const t = performance.now() * 0.0005;
     light1.position.x = lightTarget.position.x + Math.cos(t) * 7;
-    // light1.position.z = lightTarget.position.z + Math.sin(t) * 7; // its cool that this one is not included
+    light1.position.z = lightTarget.position.z + Math.sin(t) * 7;
     light1.position.y = lightTarget.position.y + 3;
 
     controls.update();
