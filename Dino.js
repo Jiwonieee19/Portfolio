@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // scene
 const scene = new THREE.Scene();
-// scene.background = new THREE.Color();
+scene.background = new THREE.Color(0x2b2b2b);
 
 // camera
 const camera = new THREE.PerspectiveCamera(
@@ -17,14 +17,12 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(-2, 5, 15); // camera position (x=left/right, y=up/down, z=forward/back)
 
 // renderer
-const renderer = new THREE.WebGLRenderer({ alpha: true });
+const renderer = new THREE.WebGLRenderer();
 
 renderer.setSize(
     window.innerWidth,
     window.innerHeight
 );
-
-renderer.setClearAlpha(0); // transparent bg, but also put it as parameter in top
 
 document.body.appendChild(renderer.domElement);
 
@@ -44,6 +42,11 @@ controls.addEventListener('end', () => { isInteracting = false; idleTime = 0; })
 
 // loader
 const loader = new GLTFLoader();
+
+// grid
+const grid = new THREE.GridHelper(30, 20, 0x666666, 0x333333);
+grid.position.set(-2, -4, 4);
+scene.add(grid);
 
 // lights
 const light1 = new THREE.DirectionalLight(0xffffff, 2);
