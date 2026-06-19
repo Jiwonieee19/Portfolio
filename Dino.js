@@ -8,7 +8,7 @@ const scene = new THREE.Scene();
 
 // camera
 const camera = new THREE.PerspectiveCamera(
-    25, // field of view (FOV) in degrees — higher = wider view, objects look smaller
+    23, // field of view (FOV) in degrees — higher = wider view, objects look smaller
     window.innerWidth / window.innerHeight, // aspect ratio (matches screen)
     0.1, // near clipping plane — anything closer is invisible
     1000 // far clipping plane — anything farther is invisible
@@ -32,6 +32,13 @@ document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.target.set(-1, -2, 4); // point camera to look at the dino
+
+const homePos = new THREE.Vector3(-2, 5, 15); // camera returns here after orbit
+let isInteracting = false;
+let idleTime = 0;
+
+controls.addEventListener('start', () => { isInteracting = true; idleTime = 0; });
+controls.addEventListener('end', () => { isInteracting = false; idleTime = 0; });
 
 // loader
 const loader = new GLTFLoader();
@@ -63,9 +70,13 @@ function animate() {
 
     requestAnimationFrame(animate);
 
-    // animate zoom out/in in ifelse only
-    if (camera.position.z < 10) {
-        // camera.position.z += 0.05;
+    // return to home after 1 second of no interaction
+    if (!isInteracting) {
+        idleTime += 16; // ~16ms per frame at 60fps
+        if (idleTime > 1000) {
+            camera.position.lerp(homePos, 0.02);
+            controls.target.lerp(new THREE.Vector3(-1, -2, 4), 0.02);
+        }
     }
 
     controls.update();
