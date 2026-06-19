@@ -31,6 +31,8 @@ document.body.appendChild(renderer.domElement);
 // controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
+controls.minDistance = 10;
+controls.maxDistance = 30;
 controls.target.set(-1, -2, 4); // point camera to look at the dino
 
 const homePos = new THREE.Vector3(-2, 5, 15); // camera returns here after orbit
