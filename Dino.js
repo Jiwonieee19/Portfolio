@@ -51,12 +51,14 @@ scene.add(grid);
 // lights
 const light1 = new THREE.SpotLight(0xffffff, 100);
 light1.position.set(3, 2, 8);
-light1.target.position.set(-5, -1, 4);
+const lightTarget = new THREE.Object3D();
+lightTarget.position.set(-5, -1, 4);
+light1.target = lightTarget;
 light1.angle = 0.35;
 light1.penumbra = 0.5;
 light1.decay = 1;
 scene.add(light1);
-scene.add(light1.target);
+scene.add(lightTarget);
 
 const fillLeft = new THREE.DirectionalLight(0xffffff, 0.7);
 fillLeft.position.set(-5, 1, 6);
@@ -92,6 +94,11 @@ function animate() {
             controls.target.lerp(new THREE.Vector3(-1, -2, 4), 0.02);
         }
     }
+
+    const t = performance.now() * 0.0005;
+    light1.position.x = lightTarget.position.x + Math.cos(t) * 7;
+    // light1.position.z = lightTarget.position.z + Math.sin(t) * 7; // its cool that this one is not included
+    light1.position.y = lightTarget.position.y + 3;
 
     controls.update();
     renderer.render(scene, camera);
