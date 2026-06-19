@@ -136,7 +136,7 @@ function animate() {
 
     const t = performance.now() * 0.0005;
     light1.position.x = lightTarget.position.x + Math.cos(t) * 7;
-    light1.position.z = lightTarget.position.z + Math.sin(t) * 7;
+    // light1.position.z = lightTarget.position.z + Math.sin(t) * 7; // dont touch this anymore
     light1.position.y = lightTarget.position.y + 3;
 
     controls.update();
