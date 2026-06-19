@@ -49,15 +49,24 @@ grid.position.set(-2, -4, 4);
 scene.add(grid);
 
 // lights
-const light1 = new THREE.DirectionalLight(0xffffff, 2);
-light1.position.set(2, 4, 10);
+const light1 = new THREE.SpotLight(0xffffff, 100);
+light1.position.set(3, 2, 8);
+light1.target.position.set(-5, -1, 4);
+light1.angle = 0.35;
+light1.penumbra = 0.5;
+light1.decay = 1;
 scene.add(light1);
+scene.add(light1.target);
 
-const light2 = new THREE.DirectionalLight(0xffffff, 1);
-light2.position.set(-2, -1, -3);
-scene.add(light2);
+const fillLeft = new THREE.DirectionalLight(0xffffff, 0.7);
+fillLeft.position.set(-5, 1, 6);
+scene.add(fillLeft);
 
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+const fillRight = new THREE.DirectionalLight(0xffffff, 0.7);
+fillRight.position.set(5, 1, 6);
+scene.add(fillRight);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.1));
 
 // load model
 loader.load('./models/dino.glb', (gltf) => {
