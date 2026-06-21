@@ -14,7 +14,7 @@ const camera = new THREE.PerspectiveCamera(
     1000 // far clipping plane — anything farther is invisible
 );
 
-camera.position.set( 0.5, 5, 15); // camera position (x=left/right, y=up/down, z=forward/back)
+camera.position.set( 12, 5, 15); // camera position (x=left/right, y=up/down, z=forward/back)
 
 // renderer
 const renderer = new THREE.WebGLRenderer();
@@ -33,7 +33,7 @@ controls.minDistance = 10;
 controls.maxDistance = 30;
 controls.target.set(-1, -2, 4); // point camera to look at the dino
 
-const homePos = new THREE.Vector3(-2, 5, 15); // camera returns here after orbit
+const homePos = new THREE.Vector3(-1, 6, 15); // camera returns here after orbit
 let isInteracting = false;
 let idleTime = 0;
 
@@ -81,7 +81,7 @@ const cubePauseDuration = 2;
 loader.load('./models/dino.glb', (gltf) => {
 
     gltf.scene.scale.set(0.1, 0.1, 0.1); // size multiplier (higher = bigger)
-    gltf.scene.position.set(-2.5, -4, 4); // x=left/right, y=up/down, z=forward/backward
+    gltf.scene.position.set(-2, -4, 4); // x=left/right, y=up/down, z=forward/backward
     gltf.scene.rotation.set(0, Math.PI / 1.25, 0); // x=pitch, y=yaw(which way it faces), z=roll (radians)
     scene.add(gltf.scene);
 
