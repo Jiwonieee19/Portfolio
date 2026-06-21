@@ -16,10 +16,27 @@ canvas {
     display: block;
 }
 
+#description {
+    position: fixed;
+    right: 180px;
+    top: 170px;
+    z-index: 10;
+    text-align: justify;
+    max-width: 420px;
+}
+
+.desc-line {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #999;
+    letter-spacing: 0.5px;
+}
+
 #menu {
     position: fixed;
     right: 150px;
-    top: 50%;
+    top: 58%;
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
@@ -29,7 +46,7 @@ canvas {
 
 #title {
     position: fixed;
-    right: 150px;
+    right: 180px;
     top: 60px;
     z-index: 10;
     display: flex;
@@ -57,7 +74,7 @@ canvas {
 }
 
 .title-text p {
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 3px;
     color: #888;
     margin-top: 4px;
@@ -109,7 +126,7 @@ canvas {
 }
 
 .menu-item:hover .key-hint {
-    color: #000;
+    color: #ffffff;
 }
 
 #hint {
@@ -118,7 +135,7 @@ canvas {
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 1.5px;
     color: #555;
     text-align: center;
@@ -152,6 +169,18 @@ canvas {
         font-size: 18px;
     }
 
+    #description {
+        right: 50%;
+        transform: translateX(50%);
+        top: 150px;
+        text-align: center;
+        max-width: 320px;
+    }
+
+    .desc-line {
+        font-size: 12px;
+    }
+
     #menu {
         right: 50%;
         transform: translateX(50%);
@@ -175,6 +204,15 @@ canvas {
 @media (max-width: 480px) {
     #title h1 {
         font-size: 26px;
+    }
+
+    #description {
+        max-width: 260px;
+        top: 130px;
+    }
+
+    .desc-line {
+        font-size: 11px;
     }
 
     #menu {
