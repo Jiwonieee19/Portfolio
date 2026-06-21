@@ -145,3 +145,13 @@ function animate() {
 }
 
 animate();
+
+// light theme toggle
+document.querySelectorAll('.light-option').forEach(el => {
+    el.addEventListener('click', () => {
+        document.querySelectorAll('.light-option').forEach(o => o.classList.remove('active'));
+        el.classList.add('active');
+
+        light1.color.set(el.style.background);
+    });
+});
