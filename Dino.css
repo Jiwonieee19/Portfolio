@@ -97,6 +97,7 @@ canvas {
     gap: 16px;
     transition: background 0.2s;
     min-width: 220px;
+    text-decoration: none;
 }
 
 .menu-item:hover {

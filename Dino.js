@@ -50,6 +50,7 @@ scene.add(grid);
 
 // lights
 const light1 = new THREE.SpotLight(0xffffff, 100);
+window.light1 = light1;
 light1.position.set(3, 2, 8);
 const lightTarget = new THREE.Object3D();
 lightTarget.position.set(-5, -1, 4);
@@ -145,13 +146,3 @@ function animate() {
 }
 
 animate();
-
-// light theme toggle
-document.querySelectorAll('.light-option').forEach(el => {
-    el.addEventListener('click', () => {
-        document.querySelectorAll('.light-option').forEach(o => o.classList.remove('active'));
-        el.classList.add('active');
-
-        light1.color.set(el.style.background);
-    });
-});
