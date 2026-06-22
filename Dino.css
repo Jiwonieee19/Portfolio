@@ -94,6 +94,64 @@ canvas {
     display: block;
 }
 
+/* Quit Confirmation Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-box {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 40px 50px;
+    text-align: center;
+}
+
+.modal-box p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 30px;
+    letter-spacing: 0.5px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.modal-actions button {
+    background: none;
+    border: 1px solid #555;
+    color: #fff;
+    font-family: 'Righteous', sans-serif;
+    font-size: 20px;
+    padding: 12px 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.modal-actions button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+}
+
 #description {
     position: fixed;
     right: 180px;
