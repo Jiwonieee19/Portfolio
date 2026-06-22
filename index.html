@@ -11,6 +11,21 @@
 </head>
 <body>
 
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-container">
+            <!-- <img id="dino-sprite" src="./chrome-dino-sprite.png" alt="Loading dino"> -->
+            <!-- <h1>LOADING</h1> -->
+            <div class="loading-bar">
+                <div id="loading-bar-fill" class="loading-bar-fill"></div>
+            </div>
+            <p id="loading-percent">LOADING 0%</p>
+        </div>
+    </div>
+
+    <!-- Main Menu Container -->
+    <div id="menu-container">
+
     <div id="title">
         <div class="title-text">
             <h1>HEYY, I'M RYAN!</h1>
@@ -63,6 +78,9 @@
         <div class="light-option" style="background: #d4f5c8" title="Neon light"></div>
     </div>
 
+    </div>
+    <!-- End Main Menu Container -->
+
     <script type="importmap">
         {
             "imports": {
@@ -71,6 +89,7 @@
             }
         }
     </script>
+    <script type="module" src="Loading.js"></script>
     <script type="module" src="Dino.js"></script> 
     <script type="module" src="Menu.js"></script> 
 </body>

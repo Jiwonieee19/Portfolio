@@ -110,6 +110,18 @@ loader.load('./models/dino.glb', (gltf) => {
 
 let clock = new THREE.Clock();
 
+// Loading state flag - prevents idle timer from starting during loading
+let isLoadingComplete = false;
+let lightTimer = 0;
+
+// Function to mark loading as complete (called by Loading.js)
+function completeLoadingAnimation() {
+    isLoadingComplete = true;
+}
+
+// Expose function globally for Loading.js
+window.completeLoadingAnimation = completeLoadingAnimation;
+
 // animation loop
 function animate() {
 
@@ -126,8 +138,8 @@ function animate() {
         }
     }
 
-    // return to home after 1 second of no interaction
-    if (!isInteracting) {
+    // return to home after 1 second of no interaction (only after loading is complete)
+    if (!isInteracting && isLoadingComplete) {
         idleTime += 16; // ~16ms per frame at 60fps
         if (idleTime > 1000) {
             camera.position.lerp(homePos, 0.02);
@@ -135,10 +147,12 @@ function animate() {
         }
     }
 
-    const t = performance.now() * 0.0005;
-    light1.position.x = lightTarget.position.x + Math.cos(t) * 7;
-    // light1.position.z = lightTarget.position.z + Math.sin(t) * 7; // dont touch this anymore
-    light1.position.y = lightTarget.position.y + 3;
+    if (isLoadingComplete) {
+        lightTimer += delta;
+        const t = lightTimer * 0.5;
+        light1.position.x = lightTarget.position.x + Math.cos(t) * 7;
+        light1.position.y = lightTarget.position.y + 3;
+    }
 
     controls.update();
     renderer.render(scene, camera);

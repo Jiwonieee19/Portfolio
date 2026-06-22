@@ -16,6 +16,84 @@ canvas {
     display: block;
 }
 
+/* Loading Screen Styles */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #2b2b2b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#loading-screen.active {
+    display: flex;
+}
+
+.loading-container {
+    text-align: center;
+}
+
+#dino-sprite {
+    width: 120px;
+    height: 80px;
+    margin-bottom: 30px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.loading-container h1 {
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    color: #fff;
+    margin-bottom: 40px;
+    font-family: 'Righteous', sans-serif;
+}
+
+.loading-bar {
+    width: 300px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.loading-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffffff, #aaaaaa);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+#loading-percent {
+    font-size: 16px;
+    color: #888;
+    letter-spacing: 2px;
+    font-family: 'Poppins', sans-serif;
+}
+
+#menu-container {
+    display: none;
+}
+
+#menu-container.show {
+    display: block;
+}
+
 #description {
     position: fixed;
     right: 180px;
