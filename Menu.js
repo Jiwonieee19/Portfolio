@@ -36,9 +36,10 @@ function initMenu() {
         });
     }
 
-    // ---- projects view ----
+    // ---- projects / ml view ----
     const backBtn = document.querySelector('#back-btn');
     const projectsOverlay = document.querySelector('#projects-overlay');
+    const mlOverlay = document.querySelector('#ml-overlay');
     const menuEls = [
         document.querySelector('#title'),
         document.querySelector('#description'),
@@ -54,21 +55,30 @@ function initMenu() {
     function hideMenuElements() {
         menuEls.forEach(el => { if (el) el.classList.add('menu-hidden'); });
         if (backBtn) backBtn.classList.add('visible');
-        if (projectsOverlay) projectsOverlay.classList.add('visible');
     }
 
-    function hideProjectsOverlay() {
+    function hideOverlays() {
         if (backBtn) backBtn.classList.remove('visible');
         if (projectsOverlay) projectsOverlay.classList.remove('visible');
+        if (mlOverlay) mlOverlay.classList.remove('visible');
     }
 
     document.querySelector('[data-action="projects"]')?.addEventListener('click', () => {
+        if (mlOverlay) mlOverlay.classList.remove('visible');
         hideMenuElements();
+        if (projectsOverlay) projectsOverlay.classList.add('visible');
         window.goToProjectsView?.();
     });
 
+    document.querySelector('[data-action="ml"]')?.addEventListener('click', () => {
+        if (projectsOverlay) projectsOverlay.classList.remove('visible');
+        hideMenuElements();
+        if (mlOverlay) mlOverlay.classList.add('visible');
+        window.goToMlView?.();
+    });
+
     backBtn?.addEventListener('click', () => {
-        hideProjectsOverlay();
+        hideOverlays();
         window.backToMenu?.();
     });
 
@@ -91,7 +101,7 @@ function initMenu() {
         }
 
         if (key === 'ESCAPE' && backBtn?.classList.contains('visible')) {
-            hideProjectsOverlay();
+            hideOverlays();
             window.backToMenu?.();
             return;
         }
@@ -101,8 +111,17 @@ function initMenu() {
             'Q': showQuitModal,
             'W': () => {
                 if (backBtn?.classList.contains('visible')) return;
+                if (mlOverlay) mlOverlay.classList.remove('visible');
                 hideMenuElements();
+                if (projectsOverlay) projectsOverlay.classList.add('visible');
                 window.goToProjectsView?.();
+            },
+            'M': () => {
+                if (backBtn?.classList.contains('visible')) return;
+                if (projectsOverlay) projectsOverlay.classList.remove('visible');
+                hideMenuElements();
+                if (mlOverlay) mlOverlay.classList.add('visible');
+                window.goToMlView?.();
             },
         };
         if (map[key]) map[key]();
@@ -112,9 +131,11 @@ function initMenu() {
 Promise.all([
     fetch('menu.html').then(r => r.text()),
     fetch('projects.html').then(r => r.text()),
-]).then(([menuHtml, projectsHtml]) => {
+    fetch('ml.html').then(r => r.text()),
+]).then(([menuHtml, projectsHtml, mlHtml]) => {
     document.getElementById('menu-container').innerHTML = menuHtml;
     document.getElementById('projects-container').innerHTML = projectsHtml;
+    document.getElementById('ml-container').innerHTML = mlHtml;
     initMenu();
     window.menuReady = true;
 });

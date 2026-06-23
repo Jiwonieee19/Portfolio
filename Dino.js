@@ -41,11 +41,13 @@ let idleTime = 0;
 controls.addEventListener('start', () => { isInteracting = true; idleTime = 0; });
 controls.addEventListener('end', () => { isInteracting = false; idleTime = 0; });
 
-// Camera state machine for projects view
-// 'free' | 'to-projects' | 'projects' | 'to-menu'
+// Camera state machine
+// 'free' | 'to-projects' | 'projects' | 'to-ml' | 'ml' | 'to-menu'
 let camState = 'free';
 const projectsPos = new THREE.Vector3(5, 3, 8);
 const projectsTarget = new THREE.Vector3(-2, -1, 4);
+const mlPos = new THREE.Vector3(24, -9, -3);
+const mlTarget = new THREE.Vector3(0, -2, 4);
 const TWEEN_SPEED = 0.06;
 const TWEEN_THRESHOLD = 0.15;
 let camStatePrevPos = new THREE.Vector3();
@@ -167,6 +169,15 @@ function animate() {
             camState = 'projects';
             if (window.onProjectsViewEntered) window.onProjectsViewEntered();
         }
+    } else if (camState === 'to-ml') {
+        camera.position.lerp(mlPos, TWEEN_SPEED);
+        controls.target.lerp(mlTarget, TWEEN_SPEED);
+        if (camera.position.distanceTo(mlPos) < TWEEN_THRESHOLD &&
+            controls.target.distanceTo(mlTarget) < TWEEN_THRESHOLD) {
+            camera.position.copy(mlPos);
+            controls.target.copy(mlTarget);
+            camState = 'ml';
+        }
     } else if (camState === 'to-menu') {
         camera.position.lerp(camStatePrevPos, TWEEN_SPEED);
         controls.target.lerp(camStatePrevTarget, TWEEN_SPEED);
@@ -200,12 +211,21 @@ function goToProjectsView() {
     camState = 'to-projects';
 }
 
+function goToMlView() {
+    if (camState !== 'free') return;
+    camStatePrevPos.copy(camera.position);
+    camStatePrevTarget.copy(controls.target);
+    controls.enabled = false;
+    camState = 'to-ml';
+}
+
 function backToMenu() {
-    if (camState !== 'projects' && camState !== 'to-projects') return;
+    if (camState !== 'projects' && camState !== 'to-projects' && camState !== 'ml' && camState !== 'to-ml') return;
     camState = 'to-menu';
 }
 
 window.goToProjectsView = goToProjectsView;
+window.goToMlView = goToMlView;
 window.backToMenu = backToMenu;
 
 animate();
