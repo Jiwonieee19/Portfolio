@@ -109,10 +109,12 @@ function initMenu() {
     });
 }
 
-fetch('menu.html')
-    .then(r => r.text())
-    .then(html => {
-        document.getElementById('menu-container').innerHTML = html;
-        initMenu();
-        window.menuReady = true;
-    });
+Promise.all([
+    fetch('menu.html').then(r => r.text()),
+    fetch('projects.html').then(r => r.text()),
+]).then(([menuHtml, projectsHtml]) => {
+    document.getElementById('menu-container').innerHTML = menuHtml;
+    document.getElementById('projects-container').innerHTML = projectsHtml;
+    initMenu();
+    window.menuReady = true;
+});
