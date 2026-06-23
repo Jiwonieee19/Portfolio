@@ -38,6 +38,7 @@ function initMenu() {
 
     // ---- projects view ----
     const backBtn = document.querySelector('#back-btn');
+    const projectsOverlay = document.querySelector('#projects-overlay');
     const menuEls = [
         document.querySelector('#title'),
         document.querySelector('#description'),
@@ -48,12 +49,17 @@ function initMenu() {
 
     function showMenuElements() {
         menuEls.forEach(el => { if (el) el.classList.remove('menu-hidden'); });
-        if (backBtn) backBtn.classList.remove('visible');
     }
 
     function hideMenuElements() {
         menuEls.forEach(el => { if (el) el.classList.add('menu-hidden'); });
         if (backBtn) backBtn.classList.add('visible');
+        if (projectsOverlay) projectsOverlay.classList.add('visible');
+    }
+
+    function hideProjectsOverlay() {
+        if (backBtn) backBtn.classList.remove('visible');
+        if (projectsOverlay) projectsOverlay.classList.remove('visible');
     }
 
     document.querySelector('[data-action="projects"]')?.addEventListener('click', () => {
@@ -62,6 +68,7 @@ function initMenu() {
     });
 
     backBtn?.addEventListener('click', () => {
+        hideProjectsOverlay();
         window.backToMenu?.();
     });
 
@@ -84,6 +91,7 @@ function initMenu() {
         }
 
         if (key === 'ESCAPE' && backBtn?.classList.contains('visible')) {
+            hideProjectsOverlay();
             window.backToMenu?.();
             return;
         }
