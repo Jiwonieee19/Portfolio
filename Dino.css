@@ -86,12 +86,24 @@ canvas {
     font-family: 'Poppins', sans-serif;
 }
 
+#title, #description, #menu, #hint, #light-toggle {
+    transition: opacity 0.6s ease;
+}
+
+.menu-hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
 #menu-container {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
 }
 
 #menu-container.show {
-    display: block;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* Quit Confirmation Modal Styles */
@@ -312,6 +324,36 @@ canvas {
     border-color: #fff;
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
     transform: scale(1.15);
+}
+
+/* Back to Menu Button */
+.back-btn {
+    position: fixed;
+    top: 32px;
+    left: 32px;
+    z-index: 20;
+    background: none;
+    border: 1px solid #555;
+    color: #fff;
+    font-family: 'Righteous', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease, background 0.2s, border-color 0.2s;
+}
+
+.back-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
 }
 
 @media (max-width: 768px) {

@@ -34,11 +34,22 @@ controls.maxDistance = 30;
 controls.target.set(-1, -2, 4); // point camera to look at the dino
 
 const homePos = new THREE.Vector3(-1, 6, 15); // camera returns here after orbit
+const homeTarget = new THREE.Vector3(-1, -2, 4);
 let isInteracting = false;
 let idleTime = 0;
 
 controls.addEventListener('start', () => { isInteracting = true; idleTime = 0; });
 controls.addEventListener('end', () => { isInteracting = false; idleTime = 0; });
+
+// Camera state machine for projects view
+// 'free' | 'to-projects' | 'projects' | 'to-menu'
+let camState = 'free';
+const projectsPos = new THREE.Vector3(5, 3, 8);
+const projectsTarget = new THREE.Vector3(-2, -1, 4);
+const TWEEN_SPEED = 0.06;
+const TWEEN_THRESHOLD = 0.15;
+let camStatePrevPos = new THREE.Vector3();
+let camStatePrevTarget = new THREE.Vector3();
 
 // loader
 const loader = new GLTFLoader();
@@ -138,12 +149,34 @@ function animate() {
         }
     }
 
-    // return to home after 1 second of no interaction (only after loading is complete)
-    if (!isInteracting && isLoadingComplete) {
-        idleTime += 16; // ~16ms per frame at 60fps
-        if (idleTime > 1000) {
-            camera.position.lerp(homePos, 0.02);
-            controls.target.lerp(new THREE.Vector3(-1, -2, 4), 0.02);
+    if (camState === 'free') {
+        if (!isInteracting && isLoadingComplete) {
+            idleTime += 16;
+            if (idleTime > 1000) {
+                camera.position.lerp(homePos, 0.02);
+                controls.target.lerp(homeTarget, 0.02);
+            }
+        }
+    } else if (camState === 'to-projects') {
+        camera.position.lerp(projectsPos, TWEEN_SPEED);
+        controls.target.lerp(projectsTarget, TWEEN_SPEED);
+        if (camera.position.distanceTo(projectsPos) < TWEEN_THRESHOLD &&
+            controls.target.distanceTo(projectsTarget) < TWEEN_THRESHOLD) {
+            camera.position.copy(projectsPos);
+            controls.target.copy(projectsTarget);
+            camState = 'projects';
+            if (window.onProjectsViewEntered) window.onProjectsViewEntered();
+        }
+    } else if (camState === 'to-menu') {
+        camera.position.lerp(camStatePrevPos, TWEEN_SPEED);
+        controls.target.lerp(camStatePrevTarget, TWEEN_SPEED);
+        if (camera.position.distanceTo(camStatePrevPos) < TWEEN_THRESHOLD &&
+            controls.target.distanceTo(camStatePrevTarget) < TWEEN_THRESHOLD) {
+            camera.position.copy(camStatePrevPos);
+            controls.target.copy(camStatePrevTarget);
+            camState = 'free';
+            controls.enabled = true;
+            if (window.onProjectsViewExited) window.onProjectsViewExited();
         }
     }
 
@@ -158,5 +191,21 @@ function animate() {
     renderer.render(scene, camera);
 
 }
+
+function goToProjectsView() {
+    if (camState !== 'free') return;
+    camStatePrevPos.copy(camera.position);
+    camStatePrevTarget.copy(controls.target);
+    controls.enabled = false;
+    camState = 'to-projects';
+}
+
+function backToMenu() {
+    if (camState !== 'projects' && camState !== 'to-projects') return;
+    camState = 'to-menu';
+}
+
+window.goToProjectsView = goToProjectsView;
+window.backToMenu = backToMenu;
 
 animate();

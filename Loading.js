@@ -145,6 +145,12 @@ function completeLoading() {
     const loadingScreen = document.querySelector('#loading-screen');
     const menuContainer = document.querySelector('#menu-container');
 
+    // Wait for menu.html to be injected if not ready yet
+    if (!window.menuReady) {
+        requestAnimationFrame(completeLoading);
+        return;
+    }
+
     // Show menu first
     if (menuContainer) {
         menuContainer.classList.add('show');
