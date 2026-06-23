@@ -46,6 +46,7 @@ function initMenu() {
         document.querySelector('#menu'),
         document.querySelector('#hint'),
         document.querySelector('#light-toggle'),
+        document.querySelector('#contact'),
     ];
 
     function showMenuElements() {
@@ -62,6 +63,27 @@ function initMenu() {
         if (projectsOverlay) projectsOverlay.classList.remove('visible');
         if (mlOverlay) mlOverlay.classList.remove('visible');
     }
+
+    // ---- no games modal ----
+    const noGamesModal = document.querySelector('#no-games-modal');
+    const noGamesBack = document.querySelector('#no-games-back');
+
+    function showNoGamesModal() {
+        noGamesModal?.classList.add('active');
+    }
+
+    function hideNoGamesModal() {
+        noGamesModal?.classList.remove('active');
+    }
+
+    noGamesBack?.addEventListener('click', hideNoGamesModal);
+    if (noGamesModal) {
+        noGamesModal.addEventListener('click', (e) => {
+            if (e.target === noGamesModal) hideNoGamesModal();
+        });
+    }
+
+    document.querySelector('[data-action="play"]')?.addEventListener('click', showNoGamesModal);
 
     document.querySelector('[data-action="projects"]')?.addEventListener('click', () => {
         if (mlOverlay) mlOverlay.classList.remove('visible');
@@ -89,22 +111,23 @@ function initMenu() {
 
     // ---- keyboard shortcuts ----
     document.addEventListener('keydown', (e) => {
-        const key = e.key.toUpperCase();
+        const key = e.key;
+        const upper = key.toUpperCase();
 
-        if (key === 'ESCAPE' && quitModal?.classList.contains('active')) {
-            hideQuitModal();
+        if (key === 'Escape') {
+            if (quitModal?.classList.contains('active')) { hideQuitModal(); return; }
+            if (noGamesModal?.classList.contains('active')) { hideNoGamesModal(); return; }
+            if (backBtn?.classList.contains('visible')) { hideOverlays(); window.backToMenu?.(); return; }
+        }
+
+        if (key === 'Enter') {
+            if (backBtn?.classList.contains('visible')) return;
+            if (quitModal?.classList.contains('active')) return;
+            showNoGamesModal();
             return;
         }
 
-        if (key === 'Q' && quitModal?.classList.contains('active')) {
-            return;
-        }
-
-        if (key === 'ESCAPE' && backBtn?.classList.contains('visible')) {
-            hideOverlays();
-            window.backToMenu?.();
-            return;
-        }
+        if (upper === 'Q' && quitModal?.classList.contains('active')) return;
 
         const map = {
             'G': () => window.open('https://github.com/Jiwonieee19', '_blank'),
@@ -124,7 +147,7 @@ function initMenu() {
                 window.goToMlView?.();
             },
         };
-        if (map[key]) map[key]();
+        if (map[upper]) map[upper]();
     });
 }
 
