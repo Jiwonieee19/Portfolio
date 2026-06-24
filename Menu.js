@@ -40,6 +40,7 @@ function initMenu() {
     const backBtn = document.querySelector('#back-btn');
     const projectsOverlay = document.querySelector('#projects-overlay');
     const mlOverlay = document.querySelector('#ml-overlay');
+    const aboutmeOverlay = document.querySelector('#aboutme-overlay');
     const menuEls = [
         document.querySelector('#title'),
         document.querySelector('#description'),
@@ -62,6 +63,7 @@ function initMenu() {
         if (backBtn) backBtn.classList.remove('visible');
         if (projectsOverlay) projectsOverlay.classList.remove('visible');
         if (mlOverlay) mlOverlay.classList.remove('visible');
+        if (aboutmeOverlay) aboutmeOverlay.classList.remove('visible');
     }
 
     // ---- no games modal ----
@@ -99,6 +101,14 @@ function initMenu() {
         window.goToMlView?.();
     });
 
+    document.querySelector('[data-action="about"]')?.addEventListener('click', () => {
+        if (projectsOverlay) projectsOverlay.classList.remove('visible');
+        if (mlOverlay) mlOverlay.classList.remove('visible');
+        hideMenuElements();
+        if (aboutmeOverlay) aboutmeOverlay.classList.add('visible');
+        window.goToAboutView?.();
+    });
+
     backBtn?.addEventListener('click', () => {
         hideOverlays();
         window.backToMenu?.();
@@ -106,6 +116,10 @@ function initMenu() {
 
     window.onProjectsViewEntered = () => {};
     window.onProjectsViewExited = () => {
+        showMenuElements();
+    };
+
+    window.onAboutViewExited = () => {
         showMenuElements();
     };
 
@@ -146,6 +160,14 @@ function initMenu() {
                 if (mlOverlay) mlOverlay.classList.add('visible');
                 window.goToMlView?.();
             },
+            'A': () => {
+                if (backBtn?.classList.contains('visible')) return;
+                if (projectsOverlay) projectsOverlay.classList.remove('visible');
+                if (mlOverlay) mlOverlay.classList.remove('visible');
+                hideMenuElements();
+                if (aboutmeOverlay) aboutmeOverlay.classList.add('visible');
+                window.goToAboutView?.();
+            },
         };
         if (map[upper]) map[upper]();
     });
@@ -155,10 +177,12 @@ Promise.all([
     fetch('menu.html').then(r => r.text()),
     fetch('projects.html').then(r => r.text()),
     fetch('ml.html').then(r => r.text()),
-]).then(([menuHtml, projectsHtml, mlHtml]) => {
+    fetch('aboutme.html').then(r => r.text()),
+]).then(([menuHtml, projectsHtml, mlHtml, aboutmeHtml]) => {
     document.getElementById('menu-container').innerHTML = menuHtml;
     document.getElementById('projects-container').innerHTML = projectsHtml;
     document.getElementById('ml-container').innerHTML = mlHtml;
+    document.getElementById('aboutme-container').innerHTML = aboutmeHtml;
     initMenu();
     window.menuReady = true;
 });

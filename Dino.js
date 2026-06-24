@@ -42,12 +42,14 @@ controls.addEventListener('start', () => { isInteracting = true; idleTime = 0; }
 controls.addEventListener('end', () => { isInteracting = false; idleTime = 0; });
 
 // Camera state machine
-// 'free' | 'to-projects' | 'projects' | 'to-ml' | 'ml' | 'to-menu'
+// 'free' | 'to-projects' | 'projects' | 'to-ml' | 'ml' | 'to-about' | 'about' | 'to-menu'
 let camState = 'free';
 const projectsPos = new THREE.Vector3(5, 3, 8);
 const projectsTarget = new THREE.Vector3(-2, -1, 4);
 const mlPos = new THREE.Vector3(24, -9, -3);
 const mlTarget = new THREE.Vector3(0, -2, 4);
+const aboutPos = new THREE.Vector3(-7, 7, 12);
+const aboutTarget = new THREE.Vector3(-1, -2, 4);
 const TWEEN_SPEED = 0.06;
 const TWEEN_THRESHOLD = 0.15;
 let camStatePrevPos = new THREE.Vector3();
@@ -178,6 +180,15 @@ function animate() {
             controls.target.copy(mlTarget);
             camState = 'ml';
         }
+    } else if (camState === 'to-about') {
+        camera.position.lerp(aboutPos, TWEEN_SPEED);
+        controls.target.lerp(aboutTarget, TWEEN_SPEED);
+        if (camera.position.distanceTo(aboutPos) < TWEEN_THRESHOLD &&
+            controls.target.distanceTo(aboutTarget) < TWEEN_THRESHOLD) {
+            camera.position.copy(aboutPos);
+            controls.target.copy(aboutTarget);
+            camState = 'about';
+        }
     } else if (camState === 'to-menu') {
         camera.position.lerp(camStatePrevPos, TWEEN_SPEED);
         controls.target.lerp(camStatePrevTarget, TWEEN_SPEED);
@@ -188,6 +199,7 @@ function animate() {
             camState = 'free';
             controls.enabled = true;
             if (window.onProjectsViewExited) window.onProjectsViewExited();
+            if (window.onAboutViewExited) window.onAboutViewExited();
         }
     }
 
@@ -219,13 +231,22 @@ function goToMlView() {
     camState = 'to-ml';
 }
 
+function goToAboutView() {
+    if (camState !== 'free') return;
+    camStatePrevPos.copy(camera.position);
+    camStatePrevTarget.copy(controls.target);
+    controls.enabled = false;
+    camState = 'to-about';
+}
+
 function backToMenu() {
-    if (camState !== 'projects' && camState !== 'to-projects' && camState !== 'ml' && camState !== 'to-ml') return;
+    if (camState !== 'projects' && camState !== 'to-projects' && camState !== 'ml' && camState !== 'to-ml' && camState !== 'about' && camState !== 'to-about') return;
     camState = 'to-menu';
 }
 
 window.goToProjectsView = goToProjectsView;
 window.goToMlView = goToMlView;
+window.goToAboutView = goToAboutView;
 window.backToMenu = backToMenu;
 
 animate();

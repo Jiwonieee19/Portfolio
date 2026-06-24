@@ -1,0 +1,295 @@
+.aboutme-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+}
+
+.aboutme-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.aboutme-content {
+    width: 100%;
+    max-width: 1000px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    padding: 60px 40px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.aboutme-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.aboutme-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.aboutme-content::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 3px;
+}
+
+.aboutme-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section-title {
+    font-family: 'Righteous', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: #fff;
+    text-align: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 12px;
+}
+
+.aboutme-bio {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #999;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Education */
+.education-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 24px 32px;
+    max-width: 600px;
+    margin: 0 auto;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.education-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #666;
+}
+
+.edu-icon {
+    flex-shrink: 0;
+}
+
+.edu-details h3 {
+    font-family: 'Righteous', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.edu-date {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: #888;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+}
+
+.edu-focus {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: #666;
+    letter-spacing: 0.5px;
+}
+
+/* Tech Stack */
+.tech-category {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tech-cat-title {
+    font-family: 'Righteous', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: #ccc;
+    text-align: center;
+}
+
+.tech-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+.tech-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    padding: 12px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.tech-item:hover {
+    transform: translateY(-3px);
+    border-color: #666;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+}
+
+.tech-item img {
+    width: 28px;
+    height: 28px;
+    display: block;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
+
+.tech-item span {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #fff;
+}
+
+/* Certifications */
+.cert-grid {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.cert-card {
+    width: 300px;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.cert-card:hover {
+    border-color: #666;
+    transform: translateY(-3px);
+}
+
+.cert-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cert-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Righteous', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: #555;
+}
+
+/* Footer */
+.aboutme-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(20, 20, 20, 0.95);
+    border-top: 1px solid #333;
+    z-index: 20;
+}
+
+.aboutme-footer p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.footer-sep {
+    color: #555;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .aboutme-content {
+        padding: 40px 20px 80px;
+        gap: 36px;
+    }
+
+    .section-title {
+        font-size: 22px;
+    }
+
+    .education-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .cert-card {
+        width: 260px;
+        height: 175px;
+    }
+
+    .aboutme-footer {
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px 16px;
+    }
+
+    .footer-sep {
+        display: none;
+    }
+
+    .aboutme-footer p {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .aboutme-content {
+        padding: 30px 14px 100px;
+    }
+
+    .tech-item {
+        font-size: 12px;
+        padding: 8px 16px;
+    }
+
+    .cert-card {
+        width: 220px;
+        height: 150px;
+    }
+}
