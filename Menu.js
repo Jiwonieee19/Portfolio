@@ -13,6 +13,7 @@ function initMenu() {
     const quitModal = document.querySelector('#quit-modal');
     const quitYes = document.querySelector('#quit-yes');
     const quitNo = document.querySelector('#quit-no');
+    const sessionEnded = document.querySelector('#session-ended');
 
     function showQuitModal() {
         quitModal?.classList.add('active');
@@ -22,11 +23,68 @@ function initMenu() {
         quitModal?.classList.remove('active');
     }
 
-    function closeTab() {
-        window.close();
+    // ---- farewell screen ----
+    let sessionEndedVisits = 0;
+
+    function showSessionEnded() {
+        sessionEndedVisits++;
+        sessionEnded?.classList.add('active');
+        hideMenuElements();
+        hideOverlays();
     }
 
-    quitYes?.addEventListener('click', closeTab);
+    function hideSessionEnded() {
+        sessionEnded?.classList.remove('active');
+        showMenuElements();
+    }
+
+    // Runs only if the tab survived window.close().
+    function leavePortfolio() {
+        // Back to wherever they came from. replace() so a later Back press
+        // can't drop them into the portfolio again.
+        const ref = document.referrer;
+
+        if (ref) {
+            try {
+                if (new URL(ref, location.href).origin !== location.origin) {
+                    location.replace(ref);
+                    return;
+                }
+            } catch {
+                // Malformed referrer, fall through.
+            }
+        }
+
+        if (history.length > 1) {
+            history.back();
+            return;
+        }
+
+        // Direct visit, nothing to go back to. Re-opening via "_self" makes
+        // the tab script-opened, which is what close() requires.
+        window.open('', '_self');
+        window.close();
+
+        setTimeout(showSessionEnded, 150);
+    }
+
+    // Closes the tab, else navigates away, else shows the screen.
+    function attemptExit() {
+        window.close();
+
+        setTimeout(leavePortfolio, 100);
+    }
+
+    // Any key means leave, but don't trap the visitor on a dead key.
+    function exitFromSessionEnded() {
+        if (sessionEndedVisits > 1) {
+            hideSessionEnded();
+            return;
+        }
+        attemptExit();
+    }
+
+    quitYes?.addEventListener('click', showSessionEnded);
     quitNo?.addEventListener('click', hideQuitModal);
     document.querySelector('[data-action="quit"]')?.addEventListener('click', showQuitModal);
 
@@ -35,6 +93,8 @@ function initMenu() {
             if (e.target === quitModal) hideQuitModal();
         });
     }
+
+    sessionEnded?.addEventListener('click', exitFromSessionEnded);
 
     // ---- projects / ml view ----
     const backBtn = document.querySelector('#back-btn');
@@ -127,6 +187,13 @@ function initMenu() {
     document.addEventListener('keydown', (e) => {
         const key = e.key;
         const upper = key.toUpperCase();
+
+        // Session-ended screen: any key attempts a real exit.
+        if (sessionEnded?.classList.contains('active')) {
+            e.preventDefault();
+            exitFromSessionEnded();
+            return;
+        }
 
         if (key === 'Escape') {
             if (quitModal?.classList.contains('active')) { hideQuitModal(); return; }
