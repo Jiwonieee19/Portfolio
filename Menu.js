@@ -119,6 +119,18 @@ function initMenu() {
         if (backBtn) backBtn.classList.add('visible');
     }
 
+    function showOverlay(overlay) {
+        if (!overlay) return;
+
+        // The view markup is injected once at load and reused, so scroll
+        // positions persist between visits. Rewind while the overlay is still
+        // hidden - doing it after the fade-in makes the jump visible.
+        const scroller = overlay.querySelector('.projects-scroll, .aboutme-content');
+        if (scroller) scroller.scrollTop = 0;
+
+        overlay.classList.add('visible');
+    }
+
     function hideOverlays() {
         if (backBtn) backBtn.classList.remove('visible');
         if (projectsOverlay) projectsOverlay.classList.remove('visible');
@@ -150,14 +162,14 @@ function initMenu() {
     document.querySelector('[data-action="projects"]')?.addEventListener('click', () => {
         if (mlOverlay) mlOverlay.classList.remove('visible');
         hideMenuElements();
-        if (projectsOverlay) projectsOverlay.classList.add('visible');
+        showOverlay(projectsOverlay);
         window.goToProjectsView?.();
     });
 
     document.querySelector('[data-action="ml"]')?.addEventListener('click', () => {
         if (projectsOverlay) projectsOverlay.classList.remove('visible');
         hideMenuElements();
-        if (mlOverlay) mlOverlay.classList.add('visible');
+        showOverlay(mlOverlay);
         window.goToMlView?.();
     });
 
@@ -165,7 +177,7 @@ function initMenu() {
         if (projectsOverlay) projectsOverlay.classList.remove('visible');
         if (mlOverlay) mlOverlay.classList.remove('visible');
         hideMenuElements();
-        if (aboutmeOverlay) aboutmeOverlay.classList.add('visible');
+        showOverlay(aboutmeOverlay);
         window.goToAboutView?.();
     });
 
@@ -217,14 +229,14 @@ function initMenu() {
                 if (backBtn?.classList.contains('visible')) return;
                 if (mlOverlay) mlOverlay.classList.remove('visible');
                 hideMenuElements();
-                if (projectsOverlay) projectsOverlay.classList.add('visible');
+                showOverlay(projectsOverlay);
                 window.goToProjectsView?.();
             },
             'M': () => {
                 if (backBtn?.classList.contains('visible')) return;
                 if (projectsOverlay) projectsOverlay.classList.remove('visible');
                 hideMenuElements();
-                if (mlOverlay) mlOverlay.classList.add('visible');
+                showOverlay(mlOverlay);
                 window.goToMlView?.();
             },
             'A': () => {
@@ -232,7 +244,7 @@ function initMenu() {
                 if (projectsOverlay) projectsOverlay.classList.remove('visible');
                 if (mlOverlay) mlOverlay.classList.remove('visible');
                 hideMenuElements();
-                if (aboutmeOverlay) aboutmeOverlay.classList.add('visible');
+                showOverlay(aboutmeOverlay);
                 window.goToAboutView?.();
             },
         };
