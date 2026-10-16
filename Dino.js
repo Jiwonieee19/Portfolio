@@ -215,8 +215,9 @@ function animate() {
 
 }
 
+// These tween toward fixed destinations rather than camStatePrev*, so a new
+// request can interrupt an in-flight one - the camera just redirects.
 function goToProjectsView() {
-    if (camState !== 'free') return;
     camStatePrevPos.copy(camera.position);
     camStatePrevTarget.copy(controls.target);
     controls.enabled = false;
@@ -224,7 +225,6 @@ function goToProjectsView() {
 }
 
 function goToMlView() {
-    if (camState !== 'free') return;
     camStatePrevPos.copy(camera.position);
     camStatePrevTarget.copy(controls.target);
     controls.enabled = false;
@@ -232,7 +232,6 @@ function goToMlView() {
 }
 
 function goToAboutView() {
-    if (camState !== 'free') return;
     camStatePrevPos.copy(camera.position);
     camStatePrevTarget.copy(controls.target);
     controls.enabled = false;
